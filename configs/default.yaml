@@ -1,0 +1,75 @@
+# Model configuration
+model:
+  name: "rgcn"  # Options: rgcn, han
+  hidden_channels: 64
+  num_layers: 2
+  dropout: 0.5
+  activation: "relu"
+  use_layer_norm: false
+  
+  # R-GCN specific
+  rgcn:
+    use_bias: true
+    use_self_loops: true
+  
+  # HAN specific
+  han:
+    heads: 4
+    num_node_types: 3
+    num_edge_types: 5
+
+# Training configuration
+training:
+  epochs: 100
+  lr: 0.01
+  weight_decay: 5e-4
+  patience: 10
+  batch_size: 1
+  criterion: "cross_entropy"
+  
+  # Optimizer
+  optimizer: "adam"
+  adam:
+    betas: [0.9, 0.999]
+    eps: 1e-8
+  
+  # Scheduler
+  scheduler: "none"
+  scheduler_params: {}
+
+# Data configuration
+data:
+  name: "synthetic"  # Options: aifb, am, mutag, synthetic
+  root: "data"
+  normalize_features: true
+  add_self_loops: false
+  make_undirected: false
+  
+  # Neighbor sampling for large graphs
+  neighbor_sampling: false
+  fanouts: [10, 5]
+
+# Evaluation configuration
+evaluation:
+  metrics: ["accuracy", "f1_macro", "f1_micro", "auc_roc"]
+  save_predictions: true
+  plot_results: true
+  save_plots: true
+
+# Logging configuration
+logging:
+  use_wandb: false
+  project_name: "heterogeneous-gnn"
+  log_interval: 10
+  save_checkpoints: true
+  checkpoint_dir: "checkpoints"
+
+# Device configuration
+device:
+  auto: true  # Automatically select best device
+  force_cpu: false
+  force_cuda: false
+  force_mps: false
+
+# Reproducibility
+seed: 42
